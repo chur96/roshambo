@@ -26,10 +26,12 @@ function playRound(playerSelection, computerSelection){
         case (result == -1):
             resultStatement = `You lost! ${computerSelection} beats ${playerSelection}` 
             console.log(resultStatement);
+            cpuScore += 1
             return [0, 1];
         case (result == 1):
             resultStatement = `You Won! ${playerSelection} beats ${computerSelection}` 
             console.log(resultStatement);
+            playerScore += 1
             return [1, 0];
         default:
             resultStatement = `Draw! Both used ${playerSelection}`
@@ -71,6 +73,14 @@ function game(){
 
 }
 
+function checkScore(){
+    if (playerScore == 5 || cpuScore == 5){
+        document.querySelector('.message').textContent = `${playerScore > cpuScore ? 'Player': 'Cpu'} wins. `
+        playerScore = 0;
+        cpuScore = 0;
+    } 
+}
+
 const hands = ['rock','paper','scissors']
 const outcomes = {
     'rock' : {
@@ -90,6 +100,22 @@ const outcomes = {
         }
 }
 
-game()
+let playerScore = 0
+    ,cpuScore = 0
+    ,computerSelection
+    ,playerSelection
+    ,result;
 
- 
+const buttons = document.querySelectorAll('button'); 
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+        playerSelection = button.textContent;
+        console.log(playerSelection);
+        computerSelection = computerPlay();
+        playRound(playerSelection, computerSelection);
+        document.querySelector('.playerScore').textContent = `Player Score: ${playerScore}`;
+        document.querySelector('.cpuScore').textContent = `Cpu Score: ${cpuScore}`;
+        checkScore()
+    });
+});
+
